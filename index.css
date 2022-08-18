@@ -3,35 +3,65 @@
     margin: 0;
     box-sizing: border-box;
 }
+
 html{
     font-size: 62,5%;
 }
+
 body{
     display: flex;
+    width: 100vw;
+    height: 100vh;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: rgb(113, 117, 235);
-}
-h1{
-    color: white;
-}
-#contenedor-juego{
-    display: grid;
-    width: 800px;
-    height: 800px;
-    grid-template-areas: 
-    "a b c d"
-    "e f g h"
-    "i j k l"
-    "m n o p";
-    background-color: brown;
+    background-color: rgb(41, 52, 98);
+    gap: 10px;
 }
 
-.a, .b, .c, .d, .e, .f, .g, .h, .i, .j, .k, .l, .m, .n, .o, .p{
-    background-image: url('logos/simpsons.png');
+.carta-oculta{
+    transition: 500ms;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    border: 2px rgb(113, 117, 235) solid;
+    border: 2px rgb(41, 52, 98) solid;
+}
+
+.oculto{
+    display: none;
+}
+
+#contenedor-juego{
+    display: grid;
+    grid-template-areas: 
+    "carta carta carta carta"
+    "carta carta carta carta"
+    "carta carta carta carta"
+    "carta carta carta carta";
+    width: 800px;
+    height: 800px;
+    margin-top: 50px;
+    background-color: rgb(214, 28, 78);
+}
+
+.carta{
+    background-image: url('logos/simpsons.png');
+    transition: background-image 500ms;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 2px rgb(41, 52, 98) solid;
+}
+#boton-jugar{
+    width: 200px;
+    height: 50px;
+    background-color: rgb(28, 214, 206);
+    border: 0px;
+    font-family: 'Silkscreen', cursive;
+    font-size: 1rem;
+}
+#movimientos {
+    font-family: 'Silkscreen', cursive;
+    font-size: 2rem;
+    color: rgb(254, 219, 57);
 }
