@@ -1,8 +1,11 @@
+
 function resetearValores(){
+
     cartasJuego = [];
     cartasUsuario = [];
     movimientos = 0;
     acertadas = 0;
+
 
     const $cartas = document.querySelectorAll('.carta-oculta');
     voltearCartas($cartas, 0);
@@ -20,7 +23,9 @@ function voltearCartas($cartas, milisegundos){
     
 }
 
+
 function desbloquearCartasPermanentemente($cartas){
+
     $cartas.forEach(function($carta){
         $carta.className = 'carta';
     })
@@ -35,6 +40,7 @@ function ocultarBotonJugar(){
     $botonJugar.className = 'oculto';
 }
 
+
 function devolverCartasAleatorias(){ 
     const cartasMezcladas = devolverCartasMezcladas(cartas);
     return cartasMezcladas;
@@ -43,6 +49,7 @@ function devolverCartasAleatorias(){
 function devolverCartasMezcladas(cartas){
 
     for(let i=0; i<cartas.length; i++){
+
         const posicionRandom = devolverPosicionRandom();
         const auxiliar = cartas[posicionRandom];
         cartas[posicionRandom] = cartas[i];
@@ -53,6 +60,7 @@ function devolverCartasMezcladas(cartas){
 }
 
 function devolverPosicionRandom(){
+
     return Math.floor(Math.random() * cartas.length);
 }
 
@@ -62,6 +70,7 @@ function manejarInputUsuario(e){
     cartasUsuario.push($carta);
     mostrarCarta($carta);
     
+
     if (cartasUsuario.length !== 2){
         return;
     }
@@ -84,6 +93,7 @@ function manejarInputUsuario(e){
     document.querySelector('#movimientos').textContent = `Movimientos: ${movimientos}`;
     cartasUsuario = [];
     
+
 }
 
 function bloquearCarta($carta){
@@ -91,6 +101,7 @@ function bloquearCarta($carta){
 }
 
 function mostrarCarta($carta){
+
     const numeroCarta = Number($carta.id.replace('carta-',''));
     $carta.style.backgroundImage = imagenesCartas[cartasJuego[numeroCarta]];
 }
@@ -100,6 +111,7 @@ function compararCartasUsuario(cartasUsuario){
     const numeroCarta2 = Number(cartasUsuario[1].id.replace('carta-',''));
     
     return cartasJuego[numeroCarta1] === cartasJuego[numeroCarta2];
+
 }
 
 function desbloquearCartas($cartas, time){
@@ -119,13 +131,17 @@ function bloquearCartas($cartas, time){
     });
 }
 
+
 function bloquearCartasPermanentemente(cartasUsuario){
+
     cartasUsuario.forEach(function(carta){
         carta.className = 'carta-oculta';
     })
 }
 
+
 function finalizarJuego(){
+
     console.log(`Lo hiciste en ${movimientos + 1} movimientos`);
     $botonJugar.className = '';
     $botonJugar.textContent = 'Vover a Jugar';
