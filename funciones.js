@@ -1,12 +1,12 @@
-function reseterValores(){
+function resetearValores(){
     cartasJuego = [];
     cartasUsuario = [];
     movimientos = 0;
     acertadas = 0;
 
-    let $cartas = document.querySelectorAll('.carta-oculta');
+    const $cartas = document.querySelectorAll('.carta-oculta');
     voltearCartas($cartas, 0);
-    desbloquearCartasPermanentes($cartas);  
+    desbloquearCartasPermanentemente($cartas);  
     document.querySelector('#movimientos').textContent = 'Movimientos: ';
 }
 
@@ -20,7 +20,7 @@ function voltearCartas($cartas, milisegundos){
     
 }
 
-function desbloquearCartasPermanentes($cartas){
+function desbloquearCartasPermanentemente($cartas){
     $cartas.forEach(function($carta){
         $carta.className = 'carta';
     })
@@ -35,19 +35,16 @@ function ocultarBotonJugar(){
     $botonJugar.className = 'oculto';
 }
 
-function devolverCartasAleatorias(){
-    
-    const cartas = ['bart', 'bart', 'homero', 'homero', 'krusty', 'krusty', 'lisa', 'lisa', 'maggie', 'maggie', 'marge', 'marge', 'milhouse', 'milhouse', 'santa', 'santa'];
+function devolverCartasAleatorias(){ 
     const cartasMezcladas = devolverCartasMezcladas(cartas);
-
     return cartasMezcladas;
 }
 
 function devolverCartasMezcladas(cartas){
 
     for(let i=0; i<cartas.length; i++){
-        let posicionRandom = devolverPosicionRandom();
-        let auxiliar = cartas[posicionRandom];
+        const posicionRandom = devolverPosicionRandom();
+        const auxiliar = cartas[posicionRandom];
         cartas[posicionRandom] = cartas[i];
         cartas[i] = auxiliar;
     }
@@ -56,34 +53,37 @@ function devolverCartasMezcladas(cartas){
 }
 
 function devolverPosicionRandom(){
-    return Math.floor(Math.random() * 16);
+    return Math.floor(Math.random() * cartas.length);
 }
 
 function manejarInputUsuario(e){
-    let $carta = e.target;
+    const $carta = e.target;
     bloquearCarta($carta);
     cartasUsuario.push($carta);
     mostrarCarta($carta);
     
-    if (cartasUsuario.length === 2){
-        if (!compararCartasUsuario(cartasUsuario)){
-            let $cartas = document.querySelectorAll('.carta');
-            bloquearCartas($cartas);
-            voltearCartas(cartasUsuario, 1000);
-            desbloquearCartas($cartas,1500);
-            desbloquearCartas(cartasUsuario,1500);
-        }
-        else{  
-            bloquearCartasPermanentes(cartasUsuario);
-            acertadas++;
-            if(acertadas === 8){
-                finDelJuego();
-            }
-        }
-        movimientos++;
-        document.querySelector('#movimientos').textContent = `Movimientos: ${movimientos}`;
-        cartasUsuario = [];
+    if (cartasUsuario.length !== 2){
+        return;
     }
+
+    if (compararCartasUsuario(cartasUsuario)){
+        bloquearCartasPermanentemente(cartasUsuario);
+        acertadas += 2;
+        if(acertadas === cartasJuego.length){
+            finalizarJuego();
+        }
+    }
+    else{  
+        const $cartas = document.querySelectorAll('.carta');
+        bloquearCartas($cartas);
+        voltearCartas(cartasUsuario, 1000);
+        desbloquearCartas($cartas,1500);
+        desbloquearCartas(cartasUsuario,1500);
+    }
+    movimientos++;
+    document.querySelector('#movimientos').textContent = `Movimientos: ${movimientos}`;
+    cartasUsuario = [];
+    
 }
 
 function bloquearCarta($carta){
@@ -91,23 +91,15 @@ function bloquearCarta($carta){
 }
 
 function mostrarCarta($carta){
-    const imagenesCartas = {
-        'bart' : `url('logos/bart.png')`,
-        'homero' : `url('logos/Homero.png')`,
-        'krusty' : `url('logos/krusty.png')`,
-        'lisa' : `url('logos/lisa.png')`,
-        'maggie' : `url('logos/maggie.png')`,
-        'marge' : `url('logos/Marge.png')`,
-        'milhouse' : `url('logos/milhouse.png')`,
-        'santa' : `url('logos/santa.png')`
-    };
-
-    let numeroDeCarta = $carta.id;
-    $carta.style.backgroundImage = imagenesCartas[cartasJuego[numeroDeCarta]];
+    const numeroCarta = Number($carta.id.replace('carta-',''));
+    $carta.style.backgroundImage = imagenesCartas[cartasJuego[numeroCarta]];
 }
 
 function compararCartasUsuario(cartasUsuario){
-    return cartasJuego[cartasUsuario[0].id] === cartasJuego[cartasUsuario[1].id];
+    const numeroCarta1 = Number(cartasUsuario[0].id.replace('carta-',''));
+    const numeroCarta2 = Number(cartasUsuario[1].id.replace('carta-',''));
+    
+    return cartasJuego[numeroCarta1] === cartasJuego[numeroCarta2];
 }
 
 function desbloquearCartas($cartas, time){
@@ -127,13 +119,13 @@ function bloquearCartas($cartas, time){
     });
 }
 
-function bloquearCartasPermanentes(cartasUsuario){
+function bloquearCartasPermanentemente(cartasUsuario){
     cartasUsuario.forEach(function(carta){
         carta.className = 'carta-oculta';
     })
 }
 
-function finDelJuego(){
+function finalizarJuego(){
     console.log(`Lo hiciste en ${movimientos + 1} movimientos`);
     $botonJugar.className = '';
     $botonJugar.textContent = 'Vover a Jugar';
